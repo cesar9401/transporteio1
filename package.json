@@ -1,0 +1,15 @@
+{
+	"name": "transporte",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"live": "live-server"
+	},
+	"keywords": [],
+	"author": "Cesar Tzoc <csartalva01@gmail.com>",
+	"license": "MIT",
+	"devDependencies": {
+		"live-server": "^1.2.1"
+	}
+}
