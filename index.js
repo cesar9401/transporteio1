@@ -3,12 +3,18 @@ const cols = document.querySelector("#cols");
 const button = document.querySelector("#btn-create");
 const bntCalc = document.querySelector('#calc');
 const matrix = document.querySelector("#matrix");
+const result = document.querySelector("#result");
+const h1 = document.querySelector("#costo");
 
 const table = document.querySelector('#table');
 let rowN = 0, colN = 0;
 
 function createTable(row, col) {
 	matrix.removeAttribute('hidden');
+
+	if(table.querySelector("tbody")) {
+		table.removeChild(table.querySelector("tbody"));
+	}
 
 	const tbody = document.createElement("tbody");
 	table.appendChild(tbody);
@@ -79,7 +85,7 @@ function getCalc(event) {
 		zeros.push(tmp);
 	}
 
-	console.log(oferta, demanda);
+	// console.log(oferta, demanda);
 
 	if(oferta > demanda) {
 		zeros.forEach((value, index, array) => {
@@ -95,8 +101,8 @@ function getCalc(event) {
 			const val = i !== colN - 2 ? 0 : demanda - oferta;
 			tmp.push(val);
 		}
-		zeros.splice(rowN - 2, 0, tmp);
-		initM.splice(rowN - 2, 0, tmp);
+		zeros.splice(rowN - 2, 0, [...tmp]);
+		initM.splice(rowN - 2, 0, [...tmp]);
 	}
 
 	northwestCorner(initM, zeros);
@@ -115,16 +121,13 @@ function northwestCorner(initM, zeros) {
 	let c = 0;
 	let d = zeros[0].length - 1;
 
-	console.log(zeros[i][j]);
-	console.log(zeros[a][b]);
-	console.log(zeros[c][d]);
-
+	let cost = 0;
 	while(b < zeros[0].length - 1 && c < zeros.length - 1) {
 		const min = Math.min(zeros[a][b], zeros[c][d]);
 		zeros[a][b] -= min;
 		zeros[c][d] -= min;
 		zeros[i][j] += min;
-
+		cost += zeros[i][j] * initM[i][j];
 
 		if(zeros[a][b] === 0 && zeros[c][d] === 0) {
 			b++;
@@ -140,16 +143,102 @@ function northwestCorner(initM, zeros) {
 		}
 	}
 
-	/* obtener costo */
-	let cost = 0;
-	for(i = 0; i < zeros.length; i++) {
-		for (let j = 0; j < zeros[i].length; j++) {
-			cost += zeros[i][j] * initM[i][j];
-		}
+	renderTables(initM, zeros, cost);
+}
+
+function renderTables(initM, zeros, cost) {
+	result.removeAttribute("hidden");
+	const table1 = document.querySelector("#table1");
+	const table2 = document.querySelector("#table2");
+
+	if(table1.querySelector("thead")) {
+		table1.removeChild(table1.querySelector("thead"));
 	}
 
-	console.log(zeros);
-	console.log(cost);
+	if(table1.querySelector("tbody")) {
+		table1.removeChild(table1.querySelector("tbody"));
+	}
+
+	if(table2.querySelector("thead")) {
+		table2.removeChild(table2.querySelector("thead"));
+	}
+
+	if(table2.querySelector("tbody")) {
+		table2.removeChild(table2.querySelector("tbody"));
+	}
+
+	/* construir tabla 1 */
+	const thead1 = document.createElement("thead");
+	table1.appendChild(thead1);
+
+	const tr1 = document.createElement("tr");
+	thead1.appendChild(tr1);
+	for (let i = 0; i < zeros[0].length + 1; i++) {
+		const th = document.createElement("th");
+		th.innerHTML = i === 0 ? "Fuente/Destino" : i === zeros[0].length ? "Oferta" : `Destino ${i}`;
+		tr1.appendChild(th);
+	}
+
+	const tbody1 = document.createElement("tbody");
+	table1.appendChild(tbody1);
+	for (let i = 0; i < zeros.length; i++) {
+		const tr = document.createElement("tr");
+		for (let j = 0; j < zeros[i].length + 1; j++) {
+			const td = document.createElement("td");
+			if(j === 0) {
+				td.innerHTML = i !== zeros.length - 1 ? `Fuente ${i + 1}` : "Demanda";
+			} else if(i === zeros.length - 1) {
+				td.innerHTML = j !== zeros[i].length ? `${initM[i][j - 1]}` : ''; /* Demanda */
+			}else if(j === zeros[i].length) {
+				td.innerHTML = i !== zeros.length - 1 ? `${initM[i][j - 1]}` : '' /* oferta */
+			} else {
+				td.innerHTML = zeros[i][j - 1];
+				if(zeros[i][j - 1]) {
+					td.style.background = '#F1C40F';
+				}
+			}
+			tr.appendChild(td);
+		}
+		tbody1.appendChild(tr);
+	}
+
+	/* construir tabla 2 */
+	const thead2 = document.createElement("thead");
+	table2.appendChild(thead2);
+
+	const tr2 = document.createElement("tr");
+	thead2.appendChild(tr2);
+	for (let i = 0; i < zeros[0].length + 1; i++) {
+		const th = document.createElement("th");
+		th.innerHTML = i === 0 ? "Fuente/Destino" : i === zeros[0].length ? "Oferta" : `Destino ${i}`;
+		tr2.appendChild(th);
+	}
+
+	const tbody2 = document.createElement("tbody");
+	table2.appendChild(tbody2);
+	for (let i = 0; i < zeros.length; i++) {
+		const tr = document.createElement("tr");
+		for (let j = 0; j < zeros[i].length + 1; j++) {
+			const td = document.createElement("td");
+			if(j === 0) {
+				td.innerHTML = i !== zeros.length - 1 ? `Fuente ${i + 1}` : "Demanda";
+			} else if(i === zeros.length - 1) {
+				td.innerHTML = j !== zeros[i].length ? `${initM[i][j - 1]}` : ''; /* Demanda */
+			}else if(j === zeros[i].length) {
+				td.innerHTML = i !== zeros.length - 1 ? `${initM[i][j - 1]}` : '' /* oferta */
+			} else {
+				td.innerHTML = `${initM[i][j - 1]} ${String.fromCharCode(215)} ${zeros[i][j - 1]}`;
+				if(zeros[i][j - 1]) {
+					td.style.background = '#F1C40F';
+				}
+			}
+			tr.appendChild(td);
+		}
+		tbody2.appendChild(tr);
+	}
+
+	/* costo */
+	h1.innerHTML = `Costo de transporte por el metodo de la esquina noroeste: ${Number.parseFloat(cost).toFixed(2)}`;
 }
 
 function getMatrix() {
@@ -174,5 +263,3 @@ function getMatrix() {
 
 button.addEventListener('click', getSize);
 bntCalc.addEventListener('click', getCalc);
-
-console.info(table);
