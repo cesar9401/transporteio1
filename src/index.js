@@ -37,6 +37,7 @@ function createTable(row, col) {
 				const input = document.createElement("input");
 				input.type = i === 0 || j === 0 ? "text" : "number";
 				input.step = "any";
+				input.placeholder = "0";
 				// input.value = i === 0 && j === col - 1 ? "Demanda" : i === row - 1 && j === 0 ? "Oferta" : "";
 				input.classList.add("form-control");
 				td.appendChild(input);
@@ -98,8 +99,57 @@ function getCalc(event) {
 		initM.splice(rowN - 2, 0, tmp);
 	}
 
-	console.log(initM);
+	northwestCorner(initM, zeros);
+}
+
+/* esquina noroeste */
+function northwestCorner(initM, zeros) {
+	/* punteros en zero[0][0] */
+	let i = 0, j = 0;
+
+	/* puntero en zero[a][b], aumentar b*/
+	let a = zeros.length - 1;
+	let b = 0;
+
+	/* puntero en zero[c][d], aumentar c */
+	let c = 0;
+	let d = zeros[0].length - 1;
+
+	console.log(zeros[i][j]);
+	console.log(zeros[a][b]);
+	console.log(zeros[c][d]);
+
+	while(b < zeros[0].length - 1 && c < zeros.length - 1) {
+		const min = Math.min(zeros[a][b], zeros[c][d]);
+		zeros[a][b] -= min;
+		zeros[c][d] -= min;
+		zeros[i][j] += min;
+
+
+		if(zeros[a][b] === 0 && zeros[c][d] === 0) {
+			b++;
+			c++;
+			i++;
+			j++;
+		} else if(zeros[a][b] === 0) {
+			j++;
+			b++
+		} else if(zeros[c][d] === 0) {
+			i++;
+			c++;
+		}
+	}
+
+	/* obtener costo */
+	let cost = 0;
+	for(i = 0; i < zeros.length; i++) {
+		for (let j = 0; j < zeros[i].length; j++) {
+			cost += zeros[i][j] * initM[i][j];
+		}
+	}
+
 	console.log(zeros);
+	console.log(cost);
 }
 
 function getMatrix() {
