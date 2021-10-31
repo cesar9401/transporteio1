@@ -8,6 +8,18 @@
 	<title>Metodos de Transporte</title>
 </head>
 <body>
+
+	<div class="container-fluid">
+		<ul class="nav">
+			<li class="nav-item">
+				<a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal-datos">About</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#modal-use">¿C&oacute;mo usar?</a>
+			</li>
+		</ul>
+	</div>
+
 	<div class="container">
 		<div class="row my-4">
 			<div class="col my-4">
@@ -78,6 +90,45 @@
 			<div class="row">
 				<div class="col">
 					<h1 class="text-center" id="costo"></h1>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modal-datos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">About</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>C&eacute;sar Reginaldo Tzoc Alvarado</p>
+					<a href="https://github.com/cesar9401" target="blank">https://github.com/cesar9401</a>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modal-use" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">¿C&oacute;mo usar?</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Ingresar el n&uacute;mero de filas y columnas que se necesiten(deben ser al menos 4 filas y 4 columnas) y dar click en el bot&oacute;n Crear.
+						Se mostrar&uacute; una tabla(matriz) donde se podrán ingresar los datos para resolver el problema de transporte deseado.
+						El método utilizado es el M&eacute;todo de esquina noroeste.
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
